@@ -1,0 +1,91 @@
+{
+  "info": {
+    "name": "UAP API - TeknoNalar",
+    "_postman_id": "e5c2e1d8-1234-5678-9012-abcdefabcdef",
+    "description": "Koleksi endpoint autentikasi dan manajemen artikel dengan JWT.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Auth - Register",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "url": { "raw": "{{base_url}}/api/auth/register", "host": ["{{base_url}}"], "path": ["api","auth","register"] },
+        "body": { "mode": "raw", "raw": "{\n  \"name\": \"Admin\",\n  \"email\": \"admin@example.com\",\n  \"password\": \"Admin@1234\",\n  \"password_confirmation\": \"Admin@1234\"\n}" }
+      }
+    },
+    {
+      "name": "Auth - Login",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "url": { "raw": "{{base_url}}/api/auth/login", "host": ["{{base_url}}"], "path": ["api","auth","login"] },
+        "body": { "mode": "raw", "raw": "{\n  \"email\": \"admin@example.com\",\n  \"password\": \"Admin@1234\"\n}" }
+      }
+    },
+    {
+      "name": "Auth - Logout",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" },
+          { "key": "Authorization", "value": "Bearer {{token}}" }
+        ],
+        "url": { "raw": "{{base_url}}/api/auth/logout", "host": ["{{base_url}}"], "path": ["api","auth","logout"] }
+      }
+    },
+    {
+      "name": "Articles - List",
+      "request": {
+        "method": "GET",
+        "url": { "raw": "{{base_url}}/api/articles", "host": ["{{base_url}}"], "path": ["api","articles"] }
+      }
+    },
+    {
+      "name": "Articles - Show",
+      "request": {
+        "method": "GET",
+        "url": { "raw": "{{base_url}}/api/articles/1", "host": ["{{base_url}}"], "path": ["api","articles","1"] }
+      }
+    },
+    {
+      "name": "Articles - Create",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" },
+          { "key": "Authorization", "value": "Bearer {{token}}" }
+        ],
+        "url": { "raw": "{{base_url}}/api/articles", "host": ["{{base_url}}"], "path": ["api","articles"] },
+        "body": { "mode": "raw", "raw": "{\n  \"title\": \"Judul\",\n  \"content\": \"Konten\",\n  \"category\": \"Cyber Security\"\n}" }
+      }
+    },
+    {
+      "name": "Articles - Update",
+      "request": {
+        "method": "PUT",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" },
+          { "key": "Authorization", "value": "Bearer {{token}}" }
+        ],
+        "url": { "raw": "{{base_url}}/api/articles/1", "host": ["{{base_url}}"], "path": ["api","articles","1"] },
+        "body": { "mode": "raw", "raw": "{\n  \"title\": \"Judul Baru\"\n}" }
+      }
+    },
+    {
+      "name": "Articles - Delete",
+      "request": {
+        "method": "DELETE",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{token}}" }
+        ],
+        "url": { "raw": "{{base_url}}/api/articles/1", "host": ["{{base_url}}"], "path": ["api","articles","1"] }
+      }
+    }
+  ],
+  "variable": [
+    { "key": "base_url", "value": "http://localhost" },
+    { "key": "token", "value": "" }
+  ]
+}

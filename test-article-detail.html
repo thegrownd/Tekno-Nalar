@@ -1,0 +1,814 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Article Detail Feature Test</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            color: #666;
+            margin-bottom: 30px;
+        }
+        
+        .test-section {
+            margin-bottom: 30px;
+            padding: 20px;
+            background: #f9f9f9;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+        }
+        
+        .test-section h2 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 20px;
+        }
+        
+        .test-item {
+            padding: 12px;
+            margin: 8px 0;
+            background: white;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border: 1px solid #e0e0e0;
+        }
+        
+        .test-item.pass {
+            border-left: 4px solid #10b981;
+        }
+        
+        .test-item.fail {
+            border-left: 4px solid #ef4444;
+        }
+        
+        .test-item.pending {
+            border-left: 4px solid #f59e0b;
+        }
+        
+        .status {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: white;
+            flex-shrink: 0;
+        }
+        
+        .status.pass {
+            background: #10b981;
+        }
+        
+        .status.fail {
+            background: #ef4444;
+        }
+        
+        .status.pending {
+            background: #f59e0b;
+        }
+        
+        .test-description {
+            flex: 1;
+        }
+        
+        .test-action {
+            padding: 8px 16px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background 0.3s;
+        }
+        
+        .test-action:hover {
+            background: #5568d3;
+        }
+        
+        .test-action:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+        
+        .summary {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .summary-card {
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+        }
+        
+        .summary-card.total {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        
+        .summary-card.pass {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+        }
+        
+        .summary-card.fail {
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            color: white;
+        }
+        
+        .summary-card.pending {
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+            color: white;
+        }
+        
+        .summary-number {
+            font-size: 48px;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+        
+        .summary-label {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+        
+        .instructions {
+            background: #fff3cd;
+            border: 1px solid #ffc107;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+        }
+        
+        .instructions h3 {
+            color: #856404;
+            margin-bottom: 10px;
+        }
+        
+        .instructions ol {
+            margin-left: 20px;
+            color: #856404;
+        }
+        
+        .instructions li {
+            margin: 8px 0;
+        }
+        
+        .app-link {
+            display: inline-block;
+            padding: 12px 24px;
+            background: #667eea;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: bold;
+            margin: 10px 0;
+            transition: background 0.3s;
+        }
+        
+        .app-link:hover {
+            background: #5568d3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧪 Article Detail Feature - Testing Suite</h1>
+        <p class="subtitle">Comprehensive testing untuk fitur halaman detail artikel</p>
+        
+        <div class="instructions">
+            <h3>📋 Instruksi Testing Manual</h3>
+            <ol>
+                <li>Buka aplikasi di tab baru: <a href="http://localhost" target="_blank" class="app-link">Buka Aplikasi</a></li>
+                <li>Ikuti setiap test case di bawah ini secara berurutan</li>
+                <li>Klik tombol "Test" untuk membuka scenario yang relevan</li>
+                <li>Verifikasi hasil sesuai expected behavior</li>
+                <li>Tandai Pass/Fail untuk setiap test</li>
+            </ol>
+        </div>
+        
+        <div class="summary">
+            <div class="summary-card total">
+                <div class="summary-label">Total Tests</div>
+                <div class="summary-number" id="total-tests">0</div>
+            </div>
+            <div class="summary-card pass">
+                <div class="summary-label">Passed</div>
+                <div class="summary-number" id="passed-tests">0</div>
+            </div>
+            <div class="summary-card fail">
+                <div class="summary-label">Failed</div>
+                <div class="summary-number" id="failed-tests">0</div>
+            </div>
+            <div class="summary-card pending">
+                <div class="summary-label">Pending</div>
+                <div class="summary-number" id="pending-tests">0</div>
+            </div>
+        </div>
+        
+        <!-- Test Section 1: Navigation -->
+        <div class="test-section">
+            <h2>1️⃣ Navigasi Dasar</h2>
+            
+            <div class="test-item pending" data-test="nav-1">
+                <div class="status pending">?</div>
+                <div class="test-description">
+                    <strong>Test 1.1:</strong> Klik tombol "Baca" pada article card → Membuka halaman detail
+                </div>
+                <button class="test-action" onclick="openApp()">Test</button>
+                <button class="test-action" onclick="markPass(this)" style="background: #10b981;">Pass</button>
+                <button class="test-action" onclick="markFail(this)" style="background: #ef4444;">Fail</button>
+            </div>
+            
+            <div class="test-item pending" data-test="nav-2">
+                <div class="status pending">?</div>
+                <div class="test-description">
+                    <strong>Test 1.2:</strong> Klik "Baca Selengkapnya" pada hero section → Membuka halaman detail
+                </div>
+                <button class="test-action" onclick="openApp()">Test</button>
+                <button class="test-action" onclick="markPass(this)" style="background: #10b981;">Pass</button>
+                <button class="test-action" onclick="markFail(this)" style="background: #ef4444;">Fail</button>
+            </div>
+            
+            <div class="test-item pending" data-test="nav-3">
+                <div class="status pending">?</div>
+                <div class="test-description">
+                    <strong>Test 1.3:</strong> Klik artikel trending di sidebar → Membuka halaman detail
+                </div>
+                <button class="test-action" onclick="openApp()">Test</button>
+                <button class="test-action" onclick="markPass(this)" style="background: #10b981;">Pass</button>
+                <button class="test-action" onclick="markFail(this)" style="background: #ef4444;">Fail</button>
+            </div>
+        </div>
+        
+        <!-- Test Section 2: URL & Routing -->
+        <div class="test-section">
+            <h2>2️⃣ URL & Routing</h2>
+            
+            <div class="test-item pending" data-test="url-1">
+                <div class="status pending">?</div>
+                <div class="test-description">
+                    <strong>Test 2.1:</strong> URL berubah ke format /articles/{id}
+                </div>
+                <button class="test-action" onclick="openApp()">Test</button>
+                <button class="test-action" onclick="markPass(this)" style="background: #10b981;">Pass</button>
+                <button class="test-action" onclick="markFail(this)" style="background: #ef4444;">Fail</button>
+            </div>
+            
+            <div class="test-item pending" data-test="url-2">
+                <div class="status pending">?</div>
+                <div class="test-description">
+                    <strong>Test 2.2:</strong> Akses langsung URL /articles/1 → Memuat artikel dengan benar
+                </div>
+                <button class="test-action" onclick="window.open('http://localhost/articles/1', '_blank')">Test</button>
+                <button class="test-action" onclick="markPass(this)" style="background: #10b981;">Pass</button>
+                <button class="test-action" onclick="markFail(this)" style="background: #ef4444;">Fail</button>
+            </div>
+            
+            <div class="test-item pending" data-test="url-3">
+                <div class="status pending">?</div>
+                <div class="test-description">
+                    <strong>Test 2.3:</strong> ID tidak valid /articles/99999 → Menampilkan error page
+                </div>
+                <button class="test-action" onclick="window.open('http://localhost/articles/99999', '_blank')">Test</button>
+                <button class="test-action" onclick="markPass(this)" style="background: #10b981;">Pass</button>
+                <button class="test-action" onclick="markFail(this)" style="background: #ef4444;">Fail</button>
+            </div>
+            
+            <div class="test-item pending" data-test="url-4">
+                <div class="status pending">?</div>
+                <div class="test-description">
+                    <strong>Test 2.4:</strong> URL dapat di-bookmark (Ctrl+D / Cmd+D)
+                </div>
+                <button class="test-action" onclick="window.open('http://localhost/articles/1', '_blank')">Test</button>
+                <button class="test-action" onclick="markPass(this)" style="background: #10b981;">Pass</button>
+                <button class="test-action" onclick="markFail(this)" style="background: #ef4444;">Fail</button>
+            </div>
+        </div>
+        
+        <!-- Test Section 3: Back Navigation -->
+        <div class="test-section">
+            <h2>3️⃣ Navigasi Kembali</h2>
+            
+            <div class="test-item pending" data-test="back-1">
+                <div class="status pending">?</div>
+                <div class="test-description">
+                    <strong>Test 3.1:</strong> Tombol "Kembali" → Kembali ke halaman sebelumnya
+                </div>
+                <button class="test-action" onclick="openApp()">Test</button>
+                <button class="test-action" onclick="markPass(this)" style="background: #10b981;">Pass</button>
+                <button class="test-action" onclick="markFail(this)" style="background: #ef4444;">Fail</button>
+            </div>
+            
+            <div class="test-item pending" data-test="back-2">
+                <div class="status pending">?</div>
+                <div class="test-description">
+                    <strong>Test 3.2:</strong> Tombol "Kembali ke Beranda" → Kembali ke home
+                </div>
+                <button class="test-action" onclick="openApp()">Test</button>
+                <button class="test-action" onclick="markPass(this)" style="background: #10b981;">Pass</button>
+                <button class="test-action" onclick="markFail(this)" style="background: #ef4444;">Fail</button>
+            </div>
+            
+            <div class="test-item pending" data-test="back-3">
+                <div class="status pending">?</div>
+                <div class="test-description">
+                    <strong>Test 3.3:</strong> Browser back button berfungsi dengan benar
+                </div>
+                <button class="test-action" onclick="openApp()">Test</button>
+                <button class="test-action" onclick="markPass(this)" style="background: #10b981;">Pass</button>
+                <button class="test-action" onclick="markFail(this)" style="background: #ef4444;">Fail</button>
+            </div>
+            
+            <div class="test-item pending" data-test="back-4">
+                <div class="status pending">?</div>
+                <div class="test-description">
+                    <strong>Test 3.4:</strong> Breadcrumb navigation berfungsi
+                </div>
+                <button class="test-action" onclick="openApp()">Test</button>
+                <button class="test-action" onclick="markPass(this)" style="background: #10b981;">Pass</button>
+                <button class="test-action" onclick="markFail(this)" style="background: #ef4444;">Fail</button>
+            </div>
+        </div>
+        
+        <!-- Test Section 4: Responsive Design -->
+        <div class="test-section">
+            <h2>4️⃣ Responsive Design</h2>
+            
+            <div class="test-item pending" data-test="resp-1">
+                <div class="status pending">?</div>
+                <div class="test-description">
+                    <strong>Test 4.1:</strong> Mobile view (< 640px) → Layout beradaptasi dengan baik
+                </div>
+                <button class="test-action" onclick="window.open('http://localhost/articles/1', '_blank')">Test</button>
+                <button class="test-action" onclick="markPass(this)" style="background: #10b981;">Pass</button>
+                <button class="test-action" onclick="markFail(this)" style="background: #ef4444;">Fail</button>
+            </div>
+            
+            <div class="test-item pending" data-test="resp-2">
+                <div class="status pending">?</div>
+                <div class="test-description">
+                    <strong>Test 4.2:</strong> Tablet view (640-1024px) → Layout beradaptasi dengan baik
+                </div>
+                <button class="test-action" onclick="window.open('http://localhost/articles/1', '_blank')">Test</button>
+                <button class="test-action" onclick="markPass(this)" style="background: #10b981;">Pass</button>
+                <button class="test-action" onclick="markFail(this)" style="background: #ef4444;">Fail</button>
+            </div>
+            
+            <div class="test-item pending" data-test="resp-3">
+                <div class="status pending">?</div>
+                <div class="test-description">
+                    <strong>Test 4.3:</strong> Desktop view (> 1024px) → Full layout tampil sempurna
+                </div>
+                <button class="test-action" onclick="window.open('http://localhost/articles/1', '_blank')">Test</button>
+                <button class="test-action" onclick="markPass(this)" style="background: #10b981;">Pass</button>
+                <button class="test-action" onclick="markFail(this)" style="background: #ef4444;">Fail</button>
+            </div>
+        </div>
+        
+        <!-- Test Section 5: Dark Mode -->
+        <div class="test-section">
+            <h2>5️⃣ Dark Mode</h2>
+            
+            <div class="test-item pending" data-test="dark-1">
+                <div class="status pending">?</div>
+                <div class="test-description">
+                    <strong>Test 5.1:</strong> Toggle dark mode → Halaman detail beradaptasi
+                </div>
+                <button class="test-action" onclick="openApp()">Test</button>
+                <button class="test-action" onclick="markPass(this)" style="background: #10b981;">Pass</button>
+                <button class="test-action" onclick="markFail(this)" style="background: #ef4444;">Fail</button>
+            </div>
+            
+            <div class="test-item pending" data-test="dark-2">
+                <div class="status pending">?</div>
+                <div class="test-description">
+                    <strong>Test 5.2:</strong> Semua elemen visible dan readable di dark mode
+                </div>
+                <button class="test-action" onclick="openApp()">Test</button>
+                <button class="test-action" onclick="markPass(this)" style="background: #10b981;">Pass</button>
+                <button class="test-action" onclick="markFail(this)" style="background: #ef4444;">Fail</button>
+            </div>
+            
+            <div class="test-item pending" data-test="dark-3">
+                <div class="status pending">?</div>
+                <div class="test-description">
+                    <strong>Test 5.3:</strong> Kontras warna memenuhi standar aksesibilitas
+                </div>
+                <button class="test-action" onclick="openApp()">Test</button>
+                <button class="test-action" onclick="markPass(this)" style="background: #10b981;">Pass</button>
+                <button class="test-action" onclick="markFail(this)" style="background: #ef4444;">Fail</button>
+            </div>
+        </div>
+        
+        <!-- Test Section 6: Social Share -->
+        <div class="test-section">
+            <h2>6️⃣ Social Share</h2>
+            
+            <div class="test-item pending" data-test="share-1">
+                <div class="status pending">?</div>
+                <div class="test-description">
+                    <strong>Test 6.1:</strong> Tombol Facebook share → Membuka dialog share
+                </div>
+                <button class="test-action" onclick="window.open('http://localhost/articles/1', '_blank')">Test</button>
+                <button class="test-action" onclick="markPass(this)" style="background: #10b981;">Pass</button>
+                <button class="test-action" onclick="markFail(this)" style="background: #ef4444;">Fail</button>
+            </div>
+            
+            <div class="test-item pending" data-test="share-2">
+                <div class="status pending">?</div>
+                <div class="test-description">
+                    <strong>Test 6.2:</strong> Tombol Twitter share → Membuka dialog tweet
+                </div>
+                <button class="test-action" onclick="window.open('http://localhost/articles/1', '_blank')">Test</button>
+                <button class="test-action" onclick="markPass(this)" style="background: #10b981;">Pass</button>
+                <button class="test-action" onclick="markFail(this)" style="background: #ef4444;">Fail</button>
+            </div>
+            
+            <div class="test-item pending" data-test="share-3">
+                <div class="status pending">?</div>
+                <div class="test-description">
+                    <strong>Test 6.3:</strong> Tombol WhatsApp share → Membuka WhatsApp
+                </div>
+                <button class="test-action" onclick="window.open('http://localhost/articles/1', '_blank')">Test</button>
+                <button class="test-action" onclick="markPass(this)" style="background: #10b981;">Pass</button>
+                <button class="test-action" onclick="markFail(this)" style="background: #ef4444;">Fail</button>
+            </div>
+            
+            <div class="test-item pending" data-test="share-4">
+                <div class="status pending">?</div>
+                <div class="test-description">
+                    <strong>Test 6.4:</strong> Tombol Copy Link → Menyalin URL ke clipboard
+                </div>
+                <button class="test-action" onclick="window.open('http://localhost/articles/1', '_blank')">Test</button>
+                <button class="test-action" onclick="markPass(this)" style="background: #10b981;">Pass</button>
+                <button class="test-action" onclick="markFail(this)" style="background: #ef4444;">Fail</button>
+            </div>
+        </div>
+        
+        <!-- Test Section 7: Content Display -->
+        <div class="test-section">
+            <h2>7️⃣ Content Display</h2>
+            
+            <div class="test-item pending" data-test="content-1">
+                <div class="status pending">?</div>
+                <div class="test-description">
+                    <strong>Test 7.1:</strong> Judul artikel tampil dengan benar
+                </div>
+                <button class="test-action" onclick="window.open('http://localhost/articles/1', '_blank')">Test</button>
+                <button class="test-action" onclick="markPass(this)" style="background: #10b981;">Pass</button>
+                <button class="test-action" onclick="markFail(this)" style="background: #ef4444;">Fail</button>
+            </div>
+            
+            <div class="test-item pending" data-test="content-2">
+                <div class="status pending">?</div>
+                <div class="test-description">
+                    <strong>Test 7.2:</strong> Konten artikel tampil lengkap
+                </div>
+                <button class="test-action" onclick="window.open('http://localhost/articles/1', '_blank')">Test</button>
+                <button class="test-action" onclick="markPass(this)" style="background: #10b981;">Pass</button>
+                <button class="test-action" onclick="markFail(this)" style="background: #ef4444;">Fail</button>
+            </div>
+            
+            <div class="test-item pending" data-test="content-3">
+                <div class="status pending">?</div>
+                <div class="test-description">
+                    <strong>Test 7.3:</strong> Gambar featured dimuat dengan benar
+                </div>
+                <button class="test-action" onclick="window.open('http://localhost/articles/1', '_blank')">Test</button>
+                <button class="test-action" onclick="markPass(this)" style="background: #10b981;">Pass</button>
+                <button class="test-action" onclick="markFail(this)" style="background: #ef4444;">Fail</button>
+            </div>
+            
+            <div class="test-item pending" data-test="content-4">
+                <div class="status pending">?</div>
+                <div class="test-description">
+                    <strong>Test 7.4:</strong> Fallback gambar berfungsi jika gambar gagal load
+                </div>
+                <button class="test-action" onclick="window.open('http://localhost/articles/1', '_blank')">Test</button>
+                <button class="test-action" onclick="markPass(this)" style="background: #10b981;">Pass</button>
+                <button class="test-action" onclick="markFail(this)" style="background: #ef4444;">Fail</button>
+            </div>
+            
+            <div class="test-item pending" data-test="content-5">
+                <div class="status pending">?</div>
+                <div class="test-description">
+                    <strong>Test 7.5:</strong> Nama penulis tampil dengan benar
+                </div>
+                <button class="test-action" onclick="window.open('http://localhost/articles/1', '_blank')">Test</button>
+                <button class="test-action" onclick="markPass(this)" style="background: #10b981;">Pass</button>
+                <button class="test-action" onclick="markFail(this)" style="background: #ef4444;">Fail</button>
+            </div>
+            
+            <div class="test-item pending" data-test="content-6">
+                <div class="status pending">?</div>
+                <div class="test-description">
+                    <strong>Test 7.6:</strong> Category badge tampil dengan warna yang sesuai
+                </div>
+                <button class="test-action" onclick="window.open('http://localhost/articles/1', '_blank')">Test</button>
+                <button class="test-action" onclick="markPass(this)" style="background: #10b981;">Pass</button>
+                <button class="test-action" onclick="markFail(this)" style="background: #ef4444;">Fail</button>
+            </div>
+            
+            <div class="test-item pending" data-test="content-7">
+                <div class="status pending">?</div>
+                <div class="test-description">
+                    <strong>Test 7.7:</strong> Format tanggal (relative time) berfungsi
+                </div>
+                <button class="test-action" onclick="window.open('http://localhost/articles/1', '_blank')">Test</button>
+                <button class="test-action" onclick="markPass(this)" style="background: #10b981;">Pass</button>
+                <button class="test-action" onclick="markFail(this)" style="background: #ef4444;">Fail</button>
+            </div>
+            
+            <div class="test-item pending" data-test="content-8">
+                <div class="status pending">?</div>
+                <div class="test-description">
+                    <strong>Test 7.8:</strong> Artikel terkait (related articles) muncul
+                </div>
+                <button class="test-action" onclick="window.open('http://localhost/articles/1', '_blank')">Test</button>
+                <button class="test-action" onclick="markPass(this)" style="background: #10b981;">Pass</button>
+                <button class="test-action" onclick="markFail(this)" style="background: #ef4444;">Fail</button>
+            </div>
+        </div>
+        
+        <!-- Test Section 8: Loading & Error States -->
+        <div class="test-section">
+            <h2>8️⃣ Loading & Error States</h2>
+            
+            <div class="test-item pending" data-test="state-1">
+                <div class="status pending">?</div>
+                <div class="test-description">
+                    <strong>Test 8.1:</strong> Loading spinner muncul saat memuat data
+                </div>
+                <button class="test-action" onclick="window.open('http://localhost/articles/1', '_blank')">Test</button>
+                <button class="test-action" onclick="markPass(this)" style="background: #10b981;">Pass</button>
+                <button class="test-action" onclick="markFail(this)" style="background: #ef4444;">Fail</button>
+            </div>
+            
+            <div class="test-item pending" data-test="state-2">
+                <div class="status pending">?</div>
+                <div class="test-description">
+                    <strong>Test 8.2:</strong> Error page tampil untuk artikel tidak ditemukan
+                </div>
+                <button class="test-action" onclick="window.open('http://localhost/articles/99999', '_blank')">Test</button>
+                <button class="test-action" onclick="markPass(this)" style="background: #10b981;">Pass</button>
+                <button class="test-action" onclick="markFail(this)" style="background: #ef4444;">Fail</button>
+            </div>
+            
+            <div class="test-item pending" data-test="state-3">
+                <div class="status pending">?</div>
+                <div class="test-description">
+                    <strong>Test 8.3:</strong> Pesan error user-friendly dan informatif
+                </div>
+                <button class="test-action" onclick="window.open('http://localhost/articles/99999', '_blank')">Test</button>
+                <button class="test-action" onclick="markPass(this)" style="background: #10b981;">Pass</button>
+                <button class="test-action" onclick="markFail(this)" style="background: #ef4444;">Fail</button>
+            </div>
+        </div>
+        
+        <!-- Test Section 9: Accessibility -->
+        <div class="test-section">
+            <h2>9️⃣ Accessibility</h2>
+            
+            <div class="test-item pending" data-test="a11y-1">
+                <div class="status pending">?</div>
+                <div class="test-description">
+                    <strong>Test 9.1:</strong> Keyboard navigation berfungsi (Tab, Enter, Esc)
+                </div>
+                <button class="test-action" onclick="window.open('http://localhost/articles/1', '_blank')">Test</button>
+                <button class="test-action" onclick="markPass(this)" style="background: #10b981;">Pass</button>
+                <button class="test-action" onclick="markFail(this)" style="background: #ef4444;">Fail</button>
+            </div>
+            
+            <div class="test-item pending" data-test="a11y-2">
+                <div class="status pending">?</div>
+                <div class="test-description">
+                    <strong>Test 9.2:</strong> ARIA labels ada pada elemen interaktif
+                </div>
+                <button class="test-action" onclick="window.open('http://localhost/articles/1', '_blank')">Test</button>
+                <button class="test-action" onclick="markPass(this)" style="background: #10b981;">Pass</button>
+                <button class="test-action" onclick="markFail(this)" style="background: #ef4444;">Fail</button>
+            </div>
+            
+            <div class="test-item pending" data-test="a11y-3">
+                <div class="status pending">?</div>
+                <div class="test-description">
+                    <strong>Test 9.3:</strong> Focus indicators visible pada semua elemen
+                </div>
+                <button class="test-action" onclick="window.open('http://localhost/articles/1', '_blank')">Test</button>
+                <button class="test-action" onclick="markPass(this)" style="background: #10b981;">Pass</button>
+                <button class="test-action" onclick="markFail(this)" style="background: #ef4444;">Fail</button>
+            </div>
+            
+            <div class="test-item pending" data-test="a11y-4">
+                <div class="status pending">?</div>
+                <div class="test-description">
+                    <strong>Test 9.4:</strong> Rasio kontras label kategori ≥ 4.5:1 pada semua tema
+                </div>
+                <button class="test-action" onclick="window.open('http://localhost', '_blank')">Test</button>
+                <button class="test-action" onclick="markPass(this)" style="background: #10b981;">Pass</button>
+                <button class="test-action" onclick="markFail(this)" style="background: #ef4444;">Fail</button>
+            </div>
+            
+            <div class="test-item pending" data-test="a11y-5">
+                <div class="status pending">?</div>
+                <div class="test-description">
+                    <strong>Test 9.5:</strong> Teks overlay pada gambar terbaca jelas di dark mode
+                </div>
+                <button class="test-action" onclick="window.open('http://localhost', '_blank')">Test</button>
+                <button class="test-action" onclick="markPass(this)" style="background: #10b981;">Pass</button>
+                <button class="test-action" onclick="markFail(this)" style="background: #ef4444;">Fail</button>
+            </div>
+            
+            <div style="margin-top:14px; padding:12px; background:#fff; border:1px solid #e0e0e0; border-radius:8px;">
+                <div style="font-weight:bold; margin-bottom:8px;">Kontras Checker</div>
+                <div style="display:flex; gap:8px; align-items:center;">
+                    <label>BG:</label><input id="bgHex" type="color" value="#3b82f6">
+                    <label>Text:</label><input id="txtHex" type="color" value="#ffffff">
+                    <button class="test-action" onclick="runContrastCheck()">Hitung</button>
+                    <span id="contrastResult" style="margin-left:8px; font-weight:bold;">–</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Test Section 10: Performance -->
+        <div class="test-section">
+            <h2>🔟 Performance</h2>
+            
+            <div class="test-item pending" data-test="perf-1">
+                <div class="status pending">?</div>
+                <div class="test-description">
+                    <strong>Test 10.1:</strong> Halaman load dalam waktu < 3 detik
+                </div>
+                <button class="test-action" onclick="window.open('http://localhost/articles/1', '_blank')">Test</button>
+                <button class="test-action" onclick="markPass(this)" style="background: #10b981;">Pass</button>
+                <button class="test-action" onclick="markFail(this)" style="background: #ef4444;">Fail</button>
+            </div>
+            
+            <div class="test-item pending" data-test="perf-2">
+                <div class="status pending">?</div>
+                <div class="test-description">
+                    <strong>Test 10.2:</strong> Tidak ada memory leak saat navigasi berulang
+                </div>
+                <button class="test-action" onclick="window.open('http://localhost', '_blank')">Test</button>
+                <button class="test-action" onclick="markPass(this)" style="background: #10b981;">Pass</button>
+                <button class="test-action" onclick="markFail(this)" style="background: #ef4444;">Fail</button>
+            </div>
+            
+            <div class="test-item pending" data-test="perf-3">
+                <div class="status pending">?</div>
+                <div class="test-description">
+                    <strong>Test 10.3:</strong> Smooth transitions dan animasi
+                </div>
+                <button class="test-action" onclick="window.open('http://localhost/articles/1', '_blank')">Test</button>
+                <button class="test-action" onclick="markPass(this)" style="background: #10b981;">Pass</button>
+                <button class="test-action" onclick="markFail(this)" style="background: #ef4444;">Fail</button>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        function openApp() {
+            window.open('http://localhost', '_blank');
+        }
+        
+        function markPass(button) {
+            const testItem = button.closest('.test-item');
+            testItem.classList.remove('pending', 'fail');
+            testItem.classList.add('pass');
+            
+            const status = testItem.querySelector('.status');
+            status.classList.remove('pending', 'fail');
+            status.classList.add('pass');
+            status.textContent = '✓';
+            
+            updateSummary();
+        }
+        
+        function markFail(button) {
+            const testItem = button.closest('.test-item');
+            testItem.classList.remove('pending', 'pass');
+            testItem.classList.add('fail');
+            
+            const status = testItem.querySelector('.status');
+            status.classList.remove('pending', 'pass');
+            status.classList.add('fail');
+            status.textContent = '✗';
+            
+            updateSummary();
+        }
+        
+        function updateSummary() {
+            const total = document.querySelectorAll('.test-item').length;
+            const passed = document.querySelectorAll('.test-item.pass').length;
+            const failed = document.querySelectorAll('.test-item.fail').length;
+            const pending = total - passed - failed;
+            
+            document.getElementById('total-tests').textContent = total;
+            document.getElementById('passed-tests').textContent = passed;
+            document.getElementById('failed-tests').textContent = failed;
+            document.getElementById('pending-tests').textContent = pending;
+            
+            // Save to localStorage
+            const results = {};
+            document.querySelectorAll('.test-item').forEach(item => {
+                const testId = item.getAttribute('data-test');
+                if (item.classList.contains('pass')) {
+                    results[testId] = 'pass';
+                } else if (item.classList.contains('fail')) {
+                    results[testId] = 'fail';
+                }
+            });
+            localStorage.setItem('testResults', JSON.stringify(results));
+        }
+        
+        // Load saved results
+        window.addEventListener('DOMContentLoaded', () => {
+            const saved = localStorage.getItem('testResults');
+            if (saved) {
+                const results = JSON.parse(saved);
+                Object.keys(results).forEach(testId => {
+                    const testItem = document.querySelector(`[data-test="${testId}"]`);
+                    if (testItem) {
+                        const status = testItem.querySelector('.status');
+                        if (results[testId] === 'pass') {
+                            testItem.classList.remove('pending', 'fail');
+                            testItem.classList.add('pass');
+                            status.classList.remove('pending', 'fail');
+                            status.classList.add('pass');
+                            status.textContent = '✓';
+                        } else if (results[testId] === 'fail') {
+                            testItem.classList.remove('pending', 'pass');
+                            testItem.classList.add('fail');
+                            status.classList.remove('pending', 'pass');
+                            status.classList.add('fail');
+                            status.textContent = '✗';
+                        }
+                    }
+                });
+            }
+            updateSummary();
+        });
+        
+        function hexToRgb(hex) {
+            const h = hex.replace('#', '');
+            const bigint = parseInt(h.length === 3 ? h.split('').map(x => x + x).join('') : h, 16);
+            const r = (bigint >> 16) & 255;
+            const g = (bigint >> 8) & 255;
+            const b = bigint & 255;
+            return [r, g, b];
+        }
+        function relLum(rgb) {
+            const s = rgb.map(v => v / 255).map(v => v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4));
+            return 0.2126 * s[0] + 0.7152 * s[1] + 0.0722 * s[2];
+        }
+        function contrast(bgHex, txtHex) {
+            const L1 = relLum(hexToRgb(bgHex));
+            const L2 = relLum(hexToRgb(txtHex));
+            const lighter = Math.max(L1, L2);
+            const darker = Math.min(L1, L2);
+            return (lighter + 0.05) / (darker + 0.05);
+        }
+        function runContrastCheck() {
+            const bg = document.getElementById('bgHex').value;
+            const tx = document.getElementById('txtHex').value;
+            const ratio = contrast(bg, tx);
+            const el = document.getElementById('contrastResult');
+            el.textContent = `${ratio.toFixed(2)}:1 ${ratio >= 4.5 ? '(OK)' : '(LOW)'}`;
+        }
+    </script>
+</body>
+</html>
